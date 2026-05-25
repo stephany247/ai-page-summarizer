@@ -25,13 +25,16 @@
     </div>
     <div class="container">
       <div class="tabs">
-        <button class="tab active">Standard</button>
-
-        <button class="tab">Quick Digest</button>
+        <button class="tab active" data-mode="standard">Standard</button>
+        <button class="tab" data-mode="quick">Quick Digest</button>
       </div>
 
       <button id="summarizeBtn">SUMMARIZE PAGE</button>
+      <div class="stats">
+        <span id="readingTime"> 0 min read </span>
 
+        <span id="wordCount"> 0 words </span>
+      </div>
       <p id="output">
         Click <span>summarize page</span> to extract this page into bullets, key
         insights, and an estimated reading time.

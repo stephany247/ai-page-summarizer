@@ -6,6 +6,7 @@
 
 body {
   width: 380px;
+  height: 70vh;
   background: #0b0b0b;
   color: white;
   font-family: Arial, sans-serif;
@@ -104,6 +105,21 @@ h1 {
 
 #summarizeBtn:hover {
   opacity: 0.9;
+}
+
+.stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stats span {
+  background: #161616;
+  border: 1px solid #262626;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #a8a8a8;
+  font-size: 13px;
 }
 
 #output {

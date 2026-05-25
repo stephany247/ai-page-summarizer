@@ -3,6 +3,23 @@ const output = document.getElementById("output");
 const titleElement = document.getElementById("pageTitle");
 const urlElement = document.getElementById("pageUrl");
 const faviconElement = document.getElementById("favicon");
+const readingTimeElement = document.getElementById("readingTime");
+const wordCountElement = document.getElementById("wordCount");
+
+let currentMode = "standard";
+const tabs = document.querySelectorAll(".tab");
+
+tabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    tabs.forEach((t) => {
+      t.classList.remove("active");
+    });
+
+    tab.classList.add("active");
+
+    currentMode = tab.dataset.mode;
+  });
+});
 
 chrome.tabs.query(
   {
@@ -45,10 +62,15 @@ button.addEventListener("click", async () => {
         return;
       }
 
+      readingTimeElement.textContent = `${response.readingTime} min read`;
+
+      wordCountElement.textContent = `${response.wordCount} words`;
+
       chrome.runtime.sendMessage(
         {
           action: "summarizeText",
           text: response.text.slice(0, 10000),
+          mode: currentMode,
         },
 
         (result) => {

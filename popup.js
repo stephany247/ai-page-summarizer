@@ -57,7 +57,14 @@ button.addEventListener("click", async () => {
             return;
           }
 
-          output.textContent = result?.summary || "No summary generated.";
+          const summary = result?.summary || "No summary generated.";
+
+          const formattedSummary = summary
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*\s/g, "• ")
+            .replace(/\n/g, "<br><br>");
+
+          output.innerHTML = formattedSummary;
         },
       );
     },

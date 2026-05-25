@@ -29,7 +29,7 @@ async function summarizeText(text) {
           {
             parts: [
               {
-                text: `Summarize this webpage in 3 bullet points:\n\n${text}`,
+                text: `Return ONLY 3 clean bullet points. Do not include introductions, titles, or explanations. Webpage: ${text}`,
               },
             ],
           },

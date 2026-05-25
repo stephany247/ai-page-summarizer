@@ -2,10 +2,25 @@
   "manifest_version": 3,
   "name": "AI Page Summarizer",
   "version": "1.0",
+
   "action": {
     "default_popup": "popup.html"
   },
-  "permissions": ["activeTab"],
+
+  "permissions": ["activeTab", "scripting"],
+
+  "host_permissions": ["https://generativelanguage.googleapis.com/*"],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["config.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

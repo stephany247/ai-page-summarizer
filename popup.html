@@ -3,14 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>AI Summarizer</title>
+
+    <link rel="stylesheet" href="popup.css" />
   </head>
+
   <body>
-    <h2>AI Summarizer</h2>
+    <h1 class="container">AI Summarizer</h1>
+    <div class="page-info">
+      <p class="label">CURRENT PAGE</p>
 
-    <button id="summarizeBtn">Summarize Page</button>
+      <div class="page-meta">
+        <img alt="Favicon" id="favicon" />
 
-    <p id="output"></p>
+        <div>
+          <h2 id="pageTitle">Loading...</h2>
+
+          <a id="pageUrl" target="_blank"></a>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="tabs">
+        <button class="tab active">Standard</button>
+
+        <button class="tab">Quick Digest</button>
+      </div>
+
+      <button id="summarizeBtn">SUMMARIZE PAGE</button>
+
+      <p id="output">
+        Click <span>summarize page</span> to extract this page into bullets, key
+        insights, and an estimated reading time.
+      </p>
+    </div>
 
     <script src="popup.js"></script>
   </body>

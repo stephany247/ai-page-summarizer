@@ -81,10 +81,20 @@ button.addEventListener("click", async () => {
 
           const summary = result?.summary || "No summary generated.";
 
-          const formattedSummary = summary
-            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-            .replace(/\*\s/g, "• ")
-            .replace(/\n/g, "<br><br>");
+          let formattedSummary = "";
+
+          if (currentMode === "quick") {
+            formattedSummary = summary
+              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+              .replace(/\*\s/g, "• ")
+              .replace(/\n/g, "<br><br>");
+          } else {
+            formattedSummary = summary
+              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+              .replace(/\*\s/g, "• ")
+              .replace(/\n{2,}/g, "<br><br>")
+              .replace(/\n/g, "<br>");
+          }
 
           output.innerHTML = formattedSummary;
         },

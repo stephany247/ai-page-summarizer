@@ -37,13 +37,27 @@ ${text}
 `;
   } else {
     prompt = `
-Return:
+Return clean concise HTML-ready output.
 
-1. A bullet point summary
+Format:
 
-2. Key insights in bullet points
+SUMMARY
+• short bullet
+• short bullet
+• short bullet
 
-Keep it clean and readable.
+KEY INSIGHTS
+• short insight
+• short insight
+• short insight
+
+Rules:
+- No markdown headings
+- No ### symbols
+- No separators
+- Keep bullets concise
+- No introductions
+- No conclusions
 
 Webpage:
 ${text}

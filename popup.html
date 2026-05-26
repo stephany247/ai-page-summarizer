@@ -9,36 +9,46 @@
   </head>
 
   <body>
-    <h1 class="container">AI Summarizer</h1>
-    <div class="page-info">
-      <p class="label">CURRENT PAGE</p>
+    <div class="container">
+      <div class="top-content">
+        <h1>AI Summarizer</h1>
+        <div class="page-info">
+          <p class="label">CURRENT PAGE</p>
 
-      <div class="page-meta">
-        <img alt="Favicon" id="favicon" />
+          <div class="page-meta">
+            <img alt="Favicon" id="favicon" />
 
-        <div>
-          <h2 id="pageTitle">Loading...</h2>
+            <div>
+              <h2 id="pageTitle">Loading...</h2>
 
-          <a id="pageUrl" target="_blank"></a>
+              <a id="pageUrl" target="_blank"></a>
+            </div>
+          </div>
         </div>
+        <div class="tabs">
+          <button class="tab active" data-mode="standard">Standard</button>
+          <button class="tab" data-mode="quick">Quick Digest</button>
+        </div>
+
+        <button id="summarizeBtn">SUMMARIZE PAGE</button>
+        <p id="output">
+          Click <span>summarize page</span> to extract this page into bullets,
+          key insights, and an estimated reading time.
+        </p>
       </div>
     </div>
-    <div class="container">
-      <div class="tabs">
-        <button class="tab active" data-mode="standard">Standard</button>
-        <button class="tab" data-mode="quick">Quick Digest</button>
-      </div>
-
-      <button id="summarizeBtn">SUMMARIZE PAGE</button>
+    <div class="footer hidden">
       <div class="stats">
-        <span id="readingTime"> 0 min read </span>
-
-        <span id="wordCount"> 0 words </span>
+        <span id="readingTime"></span>
+        <span>•</span>
+        <span id="wordCount"></span>
       </div>
-      <p id="output">
-        Click <span>summarize page</span> to extract this page into bullets, key
-        insights, and an estimated reading time.
-      </p>
+
+      <div class="footer-actions">
+        <button id="copyBtn">Copy</button>
+
+        <button id="clearBtn">Clear</button>
+      </div>
     </div>
 
     <script src="popup.js"></script>

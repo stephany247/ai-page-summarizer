@@ -5,6 +5,8 @@ const urlElement = document.getElementById("pageUrl");
 const faviconElement = document.getElementById("favicon");
 const readingTimeElement = document.getElementById("readingTime");
 const wordCountElement = document.getElementById("wordCount");
+const footer = document.querySelector(".footer");
+const clearBtn = document.getElementById("clearBtn");
 
 let currentMode = "standard";
 const tabs = document.querySelectorAll(".tab");
@@ -40,7 +42,9 @@ chrome.tabs.query(
 );
 
 button.addEventListener("click", async () => {
-  output.textContent = "Loading...";
+  footer.classList.add("hidden");
+
+  output.innerHTML = "Generating summary...";
 
   const [tab] = await chrome.tabs.query({
     active: true,
@@ -101,4 +105,11 @@ button.addEventListener("click", async () => {
       );
     },
   );
+  footer.classList.remove("hidden");
+});
+
+clearBtn.addEventListener("click", () => {
+  output.innerHTML = "";
+
+  footer.classList.add("hidden");
 });

@@ -6,14 +6,28 @@
 
 body {
   width: 380px;
-  height: 70vh;
+  height: 500px;
+  margin: 0;
+  overflow: hidden;
+
   background: #0b0b0b;
   color: white;
   font-family: Arial, sans-serif;
 }
 
 .container {
-  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-content {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  padding: 18px;
+  overflow: hidden;
 }
 
 h1 {
@@ -69,7 +83,6 @@ h1 {
   border: 1px solid #2a2a2a;
   border-radius: 14px;
   overflow: hidden;
-  margin-bottom: 22px;
 }
 
 .tab {
@@ -99,7 +112,6 @@ h1 {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  margin-bottom: 22px;
   transition: 0.2s;
 }
 
@@ -109,18 +121,24 @@ h1 {
 
 .stats {
   display: flex;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-
-.stats span {
+  gap: 6px;
   background: #161616;
   border: 1px solid #262626;
   padding: 8px 12px;
-  border-radius: 999px;
-  color: #a8a8a8;
-  font-size: 13px;
+  border-radius: 10px;
 }
+
+.stats span {
+  color: #ff5a1f;
+  font-size: 13px;
+  display: flex;
+  gap: 10px;
+}
+
+/* .stats span:not(:last-child)::after {
+  content: "•";
+  color: #5a5a5a;
+} */
 
 #output {
   background: #111;
@@ -131,10 +149,41 @@ h1 {
   font-size: 14px;
   color: #d6d6d6;
   max-height: 250px;
+  flex: 1;
   overflow-y: auto;
 }
 
 #output span {
   color: #ff5a1f;
   font-weight: 600;
+}
+
+.footer {
+  border-top: 1px solid #1f1f1f;
+
+  padding: 14px 18px;
+
+  background: #0b0b0b;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-actions button {
+  border: none;
+  background: #1a1a1a;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
 }

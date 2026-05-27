@@ -7,6 +7,7 @@ const readingTimeElement = document.getElementById("readingTime");
 const wordCountElement = document.getElementById("wordCount");
 const footer = document.querySelector(".footer");
 const clearBtn = document.getElementById("clearBtn");
+const copyBtn = document.getElementById("copyBtn");
 
 let currentMode = "standard";
 const tabs = document.querySelectorAll(".tab");
@@ -108,6 +109,7 @@ button.addEventListener("click", async () => {
 
           output.classList.remove("loading");
           output.innerHTML = formattedSummary;
+
           button.disabled = false;
           button.innerHTML = "Summarize Page";
 
@@ -120,6 +122,19 @@ button.addEventListener("click", async () => {
 
 clearBtn.addEventListener("click", () => {
   output.innerHTML = "";
-
   footer.classList.add("hidden");
+});
+
+copyBtn.addEventListener("click", async () => {
+  const text = output.innerText;
+
+  if (!text.trim()) {
+    return;
+  }
+
+  await navigator.clipboard.writeText(text);
+  copyBtn.textContent = "Copied!";
+  setTimeout(() => {
+    copyBtn.textContent = "Copy";
+  }, 2000);
 });

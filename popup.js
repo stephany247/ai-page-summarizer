@@ -42,9 +42,15 @@ chrome.tabs.query(
 );
 
 button.addEventListener("click", async () => {
+  button.disabled = true;
+  button.innerHTML = "Summarizing...";
+
   footer.classList.add("hidden");
 
-  output.innerHTML = "Generating summary...";
+  output.classList.add("loading");
+  output.innerHTML = `
+  <div class="loader"></div>
+`;
 
   const [tab] = await chrome.tabs.query({
     active: true,
@@ -100,12 +106,16 @@ button.addEventListener("click", async () => {
               .replace(/\n/g, "<br>");
           }
 
+          output.classList.remove("loading");
           output.innerHTML = formattedSummary;
+          button.disabled = false;
+          button.innerHTML = "Summarize Page";
+
+          footer.classList.remove("hidden");
         },
       );
     },
   );
-  footer.classList.remove("hidden");
 });
 
 clearBtn.addEventListener("click", () => {

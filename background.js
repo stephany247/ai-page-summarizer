@@ -1,7 +1,19 @@
 importScripts("config.js");
+let lastRequestTime = 0;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "summarizeText") {
+    const now = Date.now();
+
+    if (now - lastRequestTime < 5000) {
+      sendResponse({
+        summary: "Please wait a few seconds before generating another summary.",
+      });
+      return true;
+    }
+
+    lastRequestTime = now;
+
     summarizeText(request.text, request.mode)
       .then((summary) => {
         sendResponse({
@@ -86,6 +98,12 @@ ${text}
   );
 
   const data = await response.json();
+
+  console.log(data);
+
+  if (!data.candidates) {
+    throw new Error(data.error?.message || "No summary returned");
+  }
 
   return data.candidates[0].content.parts[0].text;
 }

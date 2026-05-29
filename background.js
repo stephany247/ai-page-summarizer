@@ -2,35 +2,36 @@ importScripts("config.js");
 let lastRequestTime = 0;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "summarizeText") {
-    const now = Date.now();
+  if (request.action !== "summarizeText" || typeof request.text !== "string") {
+    return;
+  }
+  const now = Date.now();
 
-    if (now - lastRequestTime < 5000) {
-      sendResponse({
-        summary: "Please wait a few seconds before generating another summary.",
-      });
-      return true;
-    }
-
-    lastRequestTime = now;
-
-    summarizeText(request.text, request.mode)
-      .then((summary) => {
-        sendResponse({
-          summary,
-        });
-      })
-
-      .catch((error) => {
-        console.error(error);
-
-        sendResponse({
-          summary: "Error generating summary",
-        });
-      });
-
+  if (now - lastRequestTime < 5000) {
+    sendResponse({
+      summary: "Please wait a few seconds before generating another summary.",
+    });
     return true;
   }
+
+  lastRequestTime = now;
+
+  summarizeText(request.text, request.mode)
+    .then((summary) => {
+      sendResponse({
+        summary,
+      });
+    })
+
+    .catch((error) => {
+      console.error(error);
+
+      sendResponse({
+        summary: "Error generating summary",
+      });
+    });
+
+  return true;
 });
 
 async function summarizeText(text, mode) {

@@ -12,6 +12,13 @@ const tabs = document.querySelectorAll(".tab");
 
 let currentMode = "standard";
 
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function formatSummary(summary) {
   if (currentMode === "quick") {
     return summary
@@ -88,7 +95,8 @@ button.addEventListener("click", async () => {
 
       if (saved) {
         console.log("CACHE HIT");
-        output.innerHTML = formatSummary(saved.summary);
+        const safeSummary = escapeHtml(summary);
+        output.innerHTML = formatSummary(safeSummary);
 
         readingTimeElement.textContent = `${saved.readingTime} min read`;
         wordCountElement.textContent = `${saved.wordCount} words`;
@@ -139,7 +147,7 @@ button.addEventListener("click", async () => {
               const summary = result?.summary || "No summary generated.";
 
               output.classList.remove("loading");
-              output.innerHTML = formatSummary(summary);
+              output.innerHTML = formatSummary(escapeHtml(saved.summary));
 
               const cacheKey = `${tab.url}_${currentMode}`;
               if (

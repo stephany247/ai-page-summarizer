@@ -49,7 +49,7 @@ ${text}
 `;
   } else {
     prompt = `
-Return clean concise HTML-ready output.
+Return plain text only.
 
 Format:
 
@@ -64,6 +64,8 @@ KEY INSIGHTS
 • short insight
 
 Rules:
+- No HTML
+- No markdown
 - No markdown headings
 - No ### symbols
 - No separators

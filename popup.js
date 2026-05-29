@@ -8,9 +8,30 @@ const wordCountElement = document.getElementById("wordCount");
 const footer = document.querySelector(".footer");
 const clearBtn = document.getElementById("clearBtn");
 const copyBtn = document.getElementById("copyBtn");
+const tabs = document.querySelectorAll(".tab");
 
 let currentMode = "standard";
-const tabs = document.querySelectorAll(".tab");
+
+function formatSummary(summary) {
+  if (currentMode === "quick") {
+    return summary
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*\s/g, "• ")
+      .replace(/\n/g, "<br><br>");
+  }
+
+  return summary
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/^\*\s/gm, "• ")
+    .replace(/\n{2,}/g, "<br><br>")
+    .replace(/\n/g, "<br>");
+}
+
+function resetUI() {
+  button.disabled = false;
+  button.innerHTML = "Summarize Page";
+  output.classList.remove("loading");
+}
 
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
@@ -58,62 +79,88 @@ button.addEventListener("click", async () => {
     currentWindow: true,
   });
 
-  chrome.tabs.sendMessage(
-    tab.id,
-    { action: "getPageText" },
+  const cacheKey = `${tab.url}_${currentMode}`;
+  chrome.storage.local.get(
+    [cacheKey],
 
-    (response) => {
-      if (chrome.runtime.lastError) {
-        output.textContent = chrome.runtime.lastError.message;
+    (cached) => {
+      const saved = cached[cacheKey];
+
+      if (saved) {
+        console.log("CACHE HIT");
+        output.innerHTML = formatSummary(saved.summary);
+
+        readingTimeElement.textContent = `${saved.readingTime} min read`;
+        wordCountElement.textContent = `${saved.wordCount} words`;
+
+        footer.classList.remove("hidden");
+
+        resetUI();
+
         return;
       }
+      console.log("CACHE MISS - calling Gemini");
 
-      if (!response || !response.text) {
-        output.textContent = "Could not extract page text.";
-        return;
-      }
+      chrome.tabs.sendMessage(
+        tab.id,
+        { action: "getPageText" },
 
-      readingTimeElement.textContent = `${response.readingTime} min read`;
-
-      wordCountElement.textContent = `${response.wordCount} words`;
-
-      chrome.runtime.sendMessage(
-        {
-          action: "summarizeText",
-          text: response.text.slice(0, 10000),
-          mode: currentMode,
-        },
-
-        (result) => {
+        (response) => {
           if (chrome.runtime.lastError) {
             output.textContent = chrome.runtime.lastError.message;
+            resetUI();
             return;
           }
 
-          const summary = result?.summary || "No summary generated.";
-
-          let formattedSummary = "";
-
-          if (currentMode === "quick") {
-            formattedSummary = summary
-              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-              .replace(/\*\s/g, "• ")
-              .replace(/\n/g, "<br><br>");
-          } else {
-            formattedSummary = summary
-              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-              .replace(/\*\s/g, "• ")
-              .replace(/\n{2,}/g, "<br><br>")
-              .replace(/\n/g, "<br>");
+          if (!response || !response.text) {
+            output.textContent = "Could not extract page text.";
+            resetUI();
+            return;
           }
 
-          output.classList.remove("loading");
-          output.innerHTML = formattedSummary;
+          readingTimeElement.textContent = `${response.readingTime} min read`;
 
-          button.disabled = false;
-          button.innerHTML = "Summarize Page";
+          wordCountElement.textContent = `${response.wordCount} words`;
 
-          footer.classList.remove("hidden");
+          chrome.runtime.sendMessage(
+            {
+              action: "summarizeText",
+              text: response.text.slice(0, 10000),
+              mode: currentMode,
+            },
+
+            (result) => {
+              if (chrome.runtime.lastError) {
+                output.textContent = chrome.runtime.lastError.message;
+                resetUI();
+                return;
+              }
+
+              const summary = result?.summary || "No summary generated.";
+
+              output.classList.remove("loading");
+              output.innerHTML = formatSummary(summary);
+
+              const cacheKey = `${tab.url}_${currentMode}`;
+              if (
+                summary !== "Error generating summary" &&
+                summary !== "No summary generated."
+              ) {
+                chrome.storage.local.set({
+                  [cacheKey]: {
+                    summary,
+                    readingTime: response.readingTime,
+                    wordCount: response.wordCount,
+                  },
+                });
+              }
+
+              button.disabled = false;
+              button.innerHTML = "Summarize Page";
+
+              footer.classList.remove("hidden");
+            },
+          );
         },
       );
     },

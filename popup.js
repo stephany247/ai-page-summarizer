@@ -9,6 +9,8 @@ const footer = document.querySelector(".footer");
 const clearBtn = document.getElementById("clearBtn");
 const copyBtn = document.getElementById("copyBtn");
 const tabs = document.querySelectorAll(".tab");
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
 
 let currentMode = "standard";
 
@@ -69,6 +71,19 @@ chrome.tabs.query(
     faviconElement.src = tab.favIconUrl;
   },
 );
+
+chrome.storage.local.get(["theme"], (data) => {
+  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+
+  const theme = data.theme || systemTheme;
+
+  document.body.dataset.theme = theme;
+
+  themeIcon.classList.remove("fa-moon", "fa-sun");
+  themeIcon.classList.add(theme === "dark" ? "fa-moon" : "fa-sun");
+});
 
 button.addEventListener("click", async () => {
   button.disabled = true;
@@ -192,4 +207,17 @@ copyBtn.addEventListener("click", async () => {
   setTimeout(() => {
     copyBtn.textContent = "Copy";
   }, 2000);
+});
+
+themeToggle.addEventListener("click", () => {
+  const newTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
+
+  document.body.dataset.theme = newTheme;
+
+  chrome.storage.local.set({
+    theme: newTheme,
+  });
+
+  themeIcon.classList.remove("fa-moon", "fa-sun");
+  themeIcon.classList.add(newTheme === "dark" ? "fa-moon" : "fa-sun");
 });

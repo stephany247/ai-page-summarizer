@@ -1,3 +1,4 @@
+console.log("PagePulse content script loaded");
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action !== "getPageText") {
     return;

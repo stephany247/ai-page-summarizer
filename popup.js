@@ -110,7 +110,9 @@ button.addEventListener("click", async () => {
 
       if (saved) {
         console.log("CACHE HIT");
-        const safeSummary = escapeHtml(summary);
+
+        output.classList.remove("loading");
+        const safeSummary = escapeHtml(saved.summary);
         output.innerHTML = formatSummary(safeSummary);
 
         readingTimeElement.textContent = `${saved.readingTime} min read`;
@@ -142,7 +144,6 @@ button.addEventListener("click", async () => {
           }
 
           readingTimeElement.textContent = `${response.readingTime} min read`;
-
           wordCountElement.textContent = `${response.wordCount} words`;
 
           chrome.runtime.sendMessage(
@@ -162,7 +163,7 @@ button.addEventListener("click", async () => {
               const summary = result?.summary || "No summary generated.";
 
               output.classList.remove("loading");
-              output.innerHTML = formatSummary(escapeHtml(saved.summary));
+              output.innerHTML = formatSummary(escapeHtml(summary));
 
               const cacheKey = `${tab.url}_${currentMode}`;
               if (

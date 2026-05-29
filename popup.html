@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Summarizer</title>
+    <title>PagePulse — AI Summarizer</title>
 
     <link rel="stylesheet" href="popup.css" />
     <link
@@ -19,8 +19,8 @@
     <div class="container">
       <div class="top-content">
         <div class="header">
-          <h1>AI Summarizer</h1>
-          <button id="themeToggle" class="theme-btn">
+          <h1>PagePulse — AI Summarizer</h1>
+          <button type="button" title="Toggle theme" id="themeToggle" class="theme-btn">
             <i id="themeIcon" class="fa-solid fa-moon"></i>
           </button>
         </div>
@@ -44,10 +44,10 @@
         </div>
 
         <button id="summarizeBtn">SUMMARIZE PAGE</button>
-        <p id="output">
+        <div id="output">
           Click <span>summarize page</span> to extract this page into bullets,
           key insights, and an estimated reading time.
-        </p>
+        </div>
       </div>
     </div>
     <div class="footer hidden">
